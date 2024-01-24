@@ -1,0 +1,22 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    generate-ddl: false
+    open-in-view: true
+datasource:
+  url: jdbc:mysql://host.docker.internal:3306/mydb
+  username: root
+  password: 19990106a
+  driver-class-name: com.mysql.cj.jdbc.Driver
+
+management:
+ server:
+   add-application-context-header: false
+ endpoints:
+   web:
+     exposure:
+       include: health,info,env,metrics,beans,configprops
