@@ -10,16 +10,43 @@ jobs:
   test-backend:
     runs-on: ubuntu-22.04
     steps:
-      # 检出您的 GitHub 代码
       - uses: actions/checkout@v2.5.0
-
-      # 设置 JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'temurin'  # AdoptOpenJDK 的 Temurin 发行版
-
-      # 使用 Maven 构建和测试应用程序
+          distribution: 'temurin'
       - name: Build and test with Maven
         run: mvn clean package -DskipTests
+
+  build-and-push-docker-image:
+    needs: test-backend
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.5.0
+
+      - name: Login to DockerHub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build image and push backend
+        uses: docker/build-push-action@v3
+        with:
+          context: ./path/to/backend
+          tags:  ${{secrets.DOCKERHUB_USERNAME}}/my-backend:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      # 请根据实际路径和标签替换以下步骤
+      - name: Build image and push database
+        uses: docker/build-push-action@v3
+        with:
+          context: ./path/to/database
+          tags:  ${{secrets.DOCKERHUB_USERNAME}}/my-database:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push httpd
+        uses: docker/build-push-action@v3
+        with:
+          context: ./path/to/httpd
+          tags:  ${{secrets.DOCKERHUB_USERNAME}}/my-httpd:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
