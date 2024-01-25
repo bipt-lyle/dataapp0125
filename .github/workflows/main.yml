@@ -33,21 +33,8 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./path/to/backend
-          tags:  ${{secrets.DOCKERHUB_USERNAME}}/my-backend:latest
+          tags:  ${{ secrets.DOCKERHUB_USERNAME }}/my-backend:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
-      # 请根据实际路径和标签替换以下步骤
-      
-      - name: Build image and push database
-        uses: docker/build-push-action@v3
-        with:
-          context: ./path/to/database
-          tags:  ${{secrets.DOCKERHUB_USERNAME}}/my-database:latest
-          push: ${{ github.ref == 'refs/heads/main' }}
-
-      - name: Build image and push httpd
-        uses: docker/build-push-action@v3
-        with:
-          context: ./path/to/httpd
-          tags:  ${{secrets.DOCKERHUB_USERNAME}}/my-httpd:latest
-          push: ${{ github.ref == 'refs/heads/main' }}
+      # 添加数据库和 HTTPD 镜像的构建和推送步骤
+      # 确保替换 context 和 tags 为适当的值
