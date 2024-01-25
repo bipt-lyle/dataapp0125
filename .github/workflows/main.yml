@@ -32,7 +32,7 @@ jobs:
       - name: Build image and push backend
         uses: docker/build-push-action@v3
         with:
-          context: ./dataapp0125
+          context: .
           tags:  ${{ secrets.DOCKERHUB_USERNAME }}/my-backend:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
